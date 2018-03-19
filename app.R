@@ -198,7 +198,7 @@ server <- function(input, output, session) {
     }
     else {
       duration <- reactive({
-        difftime(as.Date(input$arrival_date),as.Date(input$departure_date), units="hours")
+        as.numeric(difftime(as.Date(input$arrival_date),as.Date(input$departure_date), units="hours"))
       })
       
       withProgress(message = 'Optimizing your routes',
@@ -216,74 +216,7 @@ server <- function(input, output, session) {
         path = unlist(optimized_result[3])
         colour_of_path = unlist(optimized_result[4])
         
-        ######################################################################
-        #show path breakdown
-        ###################################################
-        num_of_40_containers = floor(input$cargo_volume/67)
-        num_of_20_containers = ceiling((input$cargo_volume %% 67)/33)
-        path_details <- as.data.frame(path)
-        rownum = nrow(path_details)
-        path_details <- as.data.frame(cbind(as.character(path_details[1:(rownum-1),]), 
-                                            as.character(path_details[2:rownum,])))
-        
-        costlist <- c()
-        durationlist <- c()
-        
-        for(p in 1:(rownum-1)) {
-          currrow = path_details[p,]
-          currrow$V1 <- as.character(currrow$V1)
-          currrow$V2 <- as.character(currrow$V2)
-          rowmatch = paths[which(paths$from_name == currrow$V1 & paths$to_name == currrow$V2),]
-          
-          if(nrow(rowmatch) == 0) {
-            dur = trucks[which(trucks$X == currrow$V1),][,as.character(currrow$V2)]
-            currcost = 6.9463*input$cargo_volume*dur
-            currduration = dur
-            
-            nextnode = ports[which(ports$name == currrow$V2),]
-            if(ports[which(ports$name == currrow$V1),]$country != nextnode$country) {
-              currcost = currcost + input$cargo_value*nextnode$tax
-            }
-          }
-          else {
-            currcost = 
-              rowmatch$cost_air*50*input$cargo_volume + 
-              rowmatch$cost_train_20*33*num_of_20_containers +
-              rowmatch$cost_train_40*67*num_of_40_containers +
-              rowmatch$cost_ship_20*33*num_of_20_containers +
-              rowmatch$cost_ship_40*67*num_of_40_containers
-            
-            currduration = rowmatch$duration
-            
-            if(rowmatch$to_country != rowmatch$from_country) {
-              currcost = currcost + input$cargo_value*ports[which(ports$name == currrow$V2),]$tax
-            }
-          }
-          
-          newrow = ports[which(ports$name == currrow$V2),]
-          if(nrow(newrow) == 0) {next} else {
-            currcost = currcost + newrow$handling_cost*input$cargo_weight + newrow$custom_cost*input$order_qty
-            currduration = currduration + newrow$handling_duration + newrow$custom_duration
-          }
-          
-          costlist = c(costlist, currcost)
-          durationlist = c(durationlist, currduration)
-        }
-        
-        for(i in 1:nrow(path_details)) {
-          path_details$From[i] = node_coords[node_coords$V2 == path_details$V1[i]]$V1
-          path_details$To[i] = node_coords[node_coords$V2 == path_details$V2[i]]$V1
-        }
-        path_details$cost = costlist
-        path_details$duration = format(as.numeric(round(durationlist/24, 1)), nsmall = 1)
-        path_details = path_details[,3:6]
-        names(path_details) <- c("From", "To", "Cost(USD)", "Duration(Days)")
-
-        output$mytable <- renderTable(path_details)
-        ###########################################################################
-        ###########################################################################
-        
-        if(days == "0") {
+        if(path == "") {
           output$mainui <- renderUI({
             tagList(
               br(),
@@ -297,7 +230,76 @@ server <- function(input, output, session) {
             )
           })  
         }
+        
         else {
+          
+          ######################################################################
+          #show path breakdown
+          ###################################################
+          num_of_40_containers = floor(input$cargo_volume/67)
+          num_of_20_containers = ceiling((input$cargo_volume %% 67)/33)
+          path_details <- as.data.frame(path)
+          rownum = nrow(path_details)
+          path_details <- as.data.frame(cbind(as.character(path_details[1:(rownum-1),]), 
+                                              as.character(path_details[2:rownum,])))
+          
+          costlist <- c()
+          durationlist <- c()
+          
+          for(p in 1:(rownum-1)) {
+            currrow = path_details[p,]
+            currrow$V1 <- as.character(currrow$V1)
+            currrow$V2 <- as.character(currrow$V2)
+            rowmatch = paths[which(paths$from_name == currrow$V1 & paths$to_name == currrow$V2),]
+            
+            if(nrow(rowmatch) == 0) {
+              dur = trucks[which(trucks$X == currrow$V1),][,as.character(currrow$V2)]
+              currcost = 6.9463*input$cargo_volume*dur
+              currduration = dur
+              
+              nextnode = ports[which(ports$name == currrow$V2),]
+              if(ports[which(ports$name == currrow$V1),]$country != nextnode$country) {
+                currcost = currcost + input$cargo_value*nextnode$tax
+              }
+            }
+            else {
+              currcost = 
+                rowmatch$cost_air*50*input$cargo_volume + 
+                rowmatch$cost_train_20*33*num_of_20_containers +
+                rowmatch$cost_train_40*67*num_of_40_containers +
+                rowmatch$cost_ship_20*33*num_of_20_containers +
+                rowmatch$cost_ship_40*67*num_of_40_containers
+              
+              currduration = rowmatch$duration
+              
+              if(rowmatch$to_country != rowmatch$from_country) {
+                currcost = currcost + input$cargo_value*ports[which(ports$name == currrow$V2),]$tax
+              }
+            }
+            
+            newrow = ports[which(ports$name == currrow$V2),]
+            if(nrow(newrow) == 0) {next} else {
+              currcost = currcost + newrow$handling_cost*input$cargo_weight + newrow$custom_cost*input$order_qty
+              currduration = currduration + newrow$handling_duration + newrow$custom_duration
+            }
+            
+            costlist = c(costlist, currcost)
+            durationlist = c(durationlist, currduration)
+          }
+          
+          for(i in 1:nrow(path_details)) {
+            path_details$From[i] = node_coords[node_coords$V2 == path_details$V1[i]]$V1
+            path_details$To[i] = node_coords[node_coords$V2 == path_details$V2[i]]$V1
+          }
+          path_details$cost = costlist
+          path_details$duration = format(as.numeric(round(durationlist/24, 1)), nsmall = 1)
+          path_details = path_details[,3:6]
+          names(path_details) <- c("From", "To", "Cost(USD)", "Duration(Days)")
+          
+          output$mytable <- renderTable(path_details)
+          ###########################################################################
+          ###########################################################################
+          
           output$total_cost <- renderText({ cost })
           output$hours_taken <- renderText({ paste(days,"days") })
           source("map.R")
