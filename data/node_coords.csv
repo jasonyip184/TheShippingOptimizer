@@ -1,0 +1,41 @@
+V1,V2,Lat,Long,Station_Type
+Hong Kong Port,Hong Kong Port S,22.308809,114.167792,S
+Shanghai Port,Shanghai Port S,31.356033,121.657391,S
+Chiwan Port,Chiwan Port S,22.467344,113.883058,S
+Mawei Port,Mawei Port S,26.006629,119.477756,S
+Chongqing Port,Chongqing Port S,29.563502,106.58926,S
+Huangpu Port,Huangpu Port S,23.09333,113.441515,S
+Nantong Port,Nantong Port S,31.990799,120.848341,S
+Ningbo Port,Ningbo Port S,29.866667, 121.55,S
+Qingdao Port,Qingdao Port S,36.018518,120.201873,S
+Guangzhou Port,Guangzhou Port S,23.093865, 113.437786,S
+Tianjin Port,Tianjin Port S,38.975833, 117.7875,S
+Xiamen Port,Xiamen Port S,24.502262, 118.084531,S
+Wuxi Port,Wuxi Port S,31.235224,119.894287,S
+Sunan Shuofang International Airport,Sunan Shuofang International Airport A,31.498891,120.435246,A
+Nanjing Lukou International Airport,Nanjing Lukou International Airport A,31.733918,118.871511,A
+Shanghai Hongqiao International Airport,Shanghai Hongqiao International Airport A,31.192429,121.334265,A
+Shanghai Pudong International Airport,Shanghai Pudong International Airport A,31.144491,121.808359,A
+Tianjin Binhai International Airport,Tianjin Binhai International Airport A,39.130589,117.359125,A
+Guangzhou Baiyun International Airport,Guangzhou Baiyun International Airport A,23.396085,113.307927,A
+Shenzhen Bao'an International Airport,Shenzhen Bao'an International Airport A,22.637046,113.814563,A
+Singapore Port,Singapore Port S,1.264, 103.84,S
+Singapore Changi Airport,Singapore Changi Airport A,1.364425,103.991485,A
+Port of Kuantan,Port of Kuantan S,3.966899,103.419242,S
+Port of Penang,Port of Penang S,5.411426,100.367924,S
+Butterworth Railway Station,Butterworth railway station T,5.394006,100.366619,T
+Bangkok Port,Bangkok Port S,13.704985,100.575233,S
+Bangkok Railway Station,Bangkok railway station T,13.77114,100.479147,T
+Kunming Train Station,Kunming Train station T,25.0175, 102.720833,T
+Chongqing Train Station,Chongqing train station T,29.550008,106.54768,T
+Shanghai Train Station,Shanghai train station T,31.249695,121.458025,T
+Wuxi Train Station,Wuxi train station T,31.59127,120.306497,T
+Shenzhen Train Station,Shenzhen train station T,22.532092,114.117241,T
+Guangzhou Train Station,Guangzhou train station T,23.1515, 113.252414,T
+New Delhi Airport,new delhi airport A,28.556483,77.099915,A
+Paradip Port,Paradip Port S,20.27152,86.667607,S
+Saigon Port,Saigon Port S,10.784862,106.737607,S
+Saigon Railway Station,Saigon railway station T,10.782807,106.677093,T
+Ho Chih Minh Airport,Ho Chih Minh airport A,10.822189,106.659381,A
+Hanoi Railway Station,Hanoi railway station T,21.024544,105.841093,T
+Noi Bai International Airport,Noi Bai International Airport A,21.218935,105.804203,A
